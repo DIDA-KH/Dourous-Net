@@ -1,5 +1,5 @@
 Dourous-Net : Plateforme Éducative Asynchrone
-Dourous-Net est un projet de fin de module (2CP 2026) conçu pour fluidifier et sécuriser le partage de connaissances à distance. L'objectif est de connecter facilement les enseignants (créateurs de contenu) et les étudiants à travers une interface moderne, fluide (SPA) et multilingue.
+Dourous-Net est un projet de fin de module SI (2CP 2026) conçu pour fluidifier et sécuriser le partage de connaissances à distance. L'objectif est de connecter facilement les enseignants (créateurs de contenu) et les étudiants à travers une interface moderne, fluide (SPA) et multilingue.
 
 ✨ L'expérience Utilisateur
 
