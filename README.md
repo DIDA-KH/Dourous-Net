@@ -15,6 +15,7 @@ Table A (Profils) : Centralise les utilisateurs selon leur rôle (étudiant/prof
 Table B (Cours) : Contient les ressources pédagogiques structurées.
 
 Table C (Interactions) : Le cœur du système reliant les étudiants aux cours pour suivre les devoirs et l'historique d'apprentissage.
+
 Les fichiers lourds (données non-structurées comme les PDF) sont stockés dans des buckets Supabase, avec des règles de sécurité (RLS) garantissant une isolation totale des données.
 
 🏗️ Justification de l'Architecture Cloud
