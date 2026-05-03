@@ -1,62 +1,71 @@
-🎓 Dourous-Net — Plateforme de Partage Éducatif Asynchrone
-Projet de Fin de Module · Architecture Cloud & Vibe Programming · 2CP 2026
-Thème #4 : Éducation
+# 🎓 Dourous-Net — Plateforme Éducative Asynchrone
 
-Plateforme moderne où les enseignants publient des cours et les étudiants les consultent et interagissent, avec suivi granulaire.
+> **Projet de Fin de Module · Architecture Cloud & Vibe · 2CP 2026**
+> **Thème 4 : Éducation**
 
-✨ Fonctionnalités Principales
-👨‍🏫 Enseignants
-Création de cours (contenu enrichi + fichiers PDF/images).
+Dourous-Net connecte enseignants (créateurs de savoirs) et étudiants dans un espace fluide permettant le partage de cours et d'exercices.
 
-Tableau de bord (vues, inscrits).
+## 🛠️ Technologies & Fonctionnalités
+- **Front-end :** Next.js 14, Tailwind CSS, multilingue (Fr/En/Ar).
+- **Back-end :** Supabase (PostgreSQL, Auth, Storage).
+- **Cloud :** Vercel (CI/CD, Serverless Edge).
+- **Acteurs :** Les enseignants créent des modules et suivent les vues ; les étudiants recherchent des professeurs, consultent les cours et soumettent leurs devoirs.
 
-Profil (spécialité, expérience, rating).
+## 🌐 Projet Déployé (Vercel)
+L'application est accessible en ligne ici : **[https://dourous-net-nine.vercel.app/](https://dourous-net-nine.vercel.app/)**
 
-👨‍🎓 Étudiants
-Recherche par nom/spécialité.
+## 🚀 Lancement (Local)
+1. Créez `.env.local` avec `NEXT_PUBLIC_SUPABASE_URL` et `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+2. Sur Supabase, assurez-vous que les tables existent et lancez les scripts RLS fournis.
+3. Créez les buckets `course-files` et `interaction-files` dans Storage.
+4. Lancez avec `npm install && npm run dev`.
 
-Consultation des supports, historique des cours validés.
+---
 
-Soumission de devoirs, évaluation des enseignants.
+## 🗺️ Mission 4 : Architecture & Données
 
-Profil personnel (niveau scolaire, contacts).
+### Schéma Général
+```mermaid
+graph TD
+    User([Utilisateurs : Étudiants / Enseignants])
+    subgraph Vercel [Hébergement Cloud : Vercel]
+        UI[Interface : Next.js 14]
+    end
+    subgraph Supabase [Backend : Supabase]
+        Auth[Authentification JWT]
+        DB[(Base relationnelle PostgreSQL)]
+        Storage[Storage : Buckets PDF]
+    end
+    User -->|Visite le site| UI
+    UI -->|Gère les sessions| Auth
+    UI <-->|Données structurées| DB
+    UI <-->|Données non-structurées| Storage
+```
 
-🎨 Interface & UX
-Design épuré, micro-animations, mode sombre/clair.
+### Mapping du Thème
 
-Multilingue : Français, Anglais, Arabe (RTL).
+| Composant | Correspondance DB | Description |
+|-----------|-------------------|-------------|
+| **Table A** | `profiles` | Utilisateurs (Étudiants/Enseignants). Centralise bio, wilaya et notation. Gérée via les triggers Auth. |
+| **Table B** | `courses` | Ressources. Métadonnées des cours (titre, sujet) rattachées à l'auteur (`teacher_id`). |
+| **Table C** | `interactions` | Activité d'apprentissage. Table de jointure reliant un étudiant (`user_id`) à un cours (`course_id`). |
+| **Fichiers** | `Storage` | Documents hébergés dans les buckets Supabase `course-files` et `interaction-files`. |
 
-SPA fluide via Next.js App Router.
+### Sécurité (RLS)
+- **`profiles` :** Lecture publique, modification par le propriétaire.
+- **`courses` :** Lecture publique, insertion/modification par l'enseignant créateur.
+- **`interactions` :** Restreintes à l'étudiant concerné et à l'enseignant du cours lié.
 
-🛠️ Stack Technologique
-Front-end : Next.js 14, TypeScript, Tailwind CSS.
+---
 
-Back-end (BaaS) : Supabase (PostgreSQL, Auth JWT, Storage, Edge Functions).
+## 🏗️ Mission 4 : Analyse d'Architecture Cloud
 
-Déploiement : Vercel (Serverless Edge, CI/CD).
+### 1. Vercel + Supabase vs Serveurs Classiques
+L'approche Cloud moderne permet d'éviter les coûts massifs d'investissement de départ (**CAPEX**) pour l'achat de serveurs physiques. En passant sur un modèle **OPEX** (dépenses opérationnelles), et grâce au modèle *Pay-as-you-go*, l'application démarre sans risque financier. On ne paie que pour les ressources réellement consommées.
 
-Sécurité : Row Level Security stricte.
+### 2. Scalabilité Vercel vs Data Center
+Dans un Data Center classique, un pic de trafic nécessite d'ajouter manuellement de nouveaux **serveurs rackables** et pose des défis majeurs de **climatisation** pour éviter la surchauffe. Avec Vercel, l'architecture *Serverless Edge* gère tout : elle déploie automatiquement de nouvelles instances en quelques millisecondes pour absorber la charge sans aucune intervention humaine.
 
-🚀 Installation & Lancement (Localhost)
-Créez .env.local avec NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY.
-
-Dans Supabase : SQL Editor → créez tables profiles, courses, interactions et exécutez les scripts SQL fournis. Créez les buckets publics course-files et interaction-files.
-
-bash
-npm install
-npm run dev
-# → http://localhost:3000
-🗺️ Mission 4 : Mapping du Thème
-Composant	Base de Données	Détails
-Table A	public.profiles	Utilisateurs (rôle student/teacher, spécialité, bio, rating)
-Table B	public.courses	Cours créés par un enseignant (titre, sujet, description, FK teacher_id)
-Table C	public.interactions	Activité : jointure étudiant-cours (statuts, fichiers, horodatage)
-Fichiers	Supabase Storage	Buckets course-files (enseignants) et interaction-files (étudiants)
-🔒 Architecture Base de Données (Résumé)
-interactions : PK id, FK user_id, FK course_id, status (pending..completed), file_path, file_mime, interaction_date.
-RLS : profiles lecture publique, écriture propriétaire ; courses lecture publique, insertion/modif réservée aux enseignants ; interactions accessible uniquement par le créateur (user_id = auth.uid()).
-
-🏗️ Mission 4 : Analyse (< 500 mots)
-CAPEX vs OPEX : Vercel + Supabase évitent l’achat de serveurs physiques (CAPEX). Modèle opérationnel (OPEX) gratuit au démarrage, mise à l’échelle selon l’usage.
-Scalabilité : L’architecture Serverless Edge alloue automatiquement des instances lors des pics, sans intervention humaine, contrairement à un datacenter qui demanderait du matériel additionnel et de la climatisation.
-Données structurées / non structurées : Les informations métier (profils, cours, interactions) sont stockées en PostgreSQL avec schéma strict, clés étrangères et types précis. Les fichiers (PDF, devoirs) sont des blobs binaires non structurés dans Supabase Storage, sans capacité d’interrogation relationnelle.
+### 3. Données Structurées vs Non-structurées
+- **Structurées :** Gérées par notre SGBDR **PostgreSQL** (tables `profiles`, `courses`, `interactions`). Elles obéissent à un schéma strict (UUID, clés étrangères, contraintes) et sont idéales pour des requêtes SQL complexes (ex: filtrage des enseignants par spécialité).
+- **Non-structurées :** Hébergées sur **Supabase Storage** (supports PDF, devoirs étudiants). Ce sont des données brutes (blobs binaires) sans structure tabulaire, stockées telles quelles car non interrogeables via SQL.
