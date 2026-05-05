@@ -22,7 +22,7 @@ L'application est accessible en ligne ici : **[https://dourous-net-nine.vercel.a
 
 ---
 
-## 🗺️ Mission 4 : Architecture & Données
+## 🗺️ Architecture & Données
 
 ### Schéma Général
 ```mermaid
@@ -58,7 +58,7 @@ graph TD
 
 ---
 
-## 🏗️ Mission 4 : Analyse d'Architecture Cloud
+## 🏗️ Analyse d'Architecture Cloud
 
 ### 1. Vercel + Supabase vs Serveurs Classiques
 L'approche Cloud moderne permet d'éviter les coûts massifs d'investissement de départ (**CAPEX**) pour l'achat de serveurs physiques. En passant sur un modèle **OPEX** (dépenses opérationnelles), et grâce au modèle *Pay-as-you-go*, l'application démarre sans risque financier. On ne paie que pour les ressources réellement consommées.
